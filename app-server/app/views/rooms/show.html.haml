@@ -1,0 +1,37 @@
+%div#room
+  %div.talk-container.flex-layout-box
+    %nav.navbar.navbar-default.navbar-fixed-top
+      .container-fluid
+        %ul.nav.navbar-nav.navbar-left
+          %li
+            = link_to root_path, class: 'navbar-brand' do
+              = "##{@room.name}"
+          %li
+            %a{href: '#'} range: 5km
+
+    - 100.times do |n|
+      - if n % 4 == 0
+        %div.message.message-sent
+          %div.message-user-name You
+          %div.message-body
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      - else
+        %div.message.message-received
+          %div.message-user-name
+            = %w(john mike elly taro bill sam).sample
+          %div.message-body
+            %p
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            - if n % 10 == 1
+              %iframe.map{allowfullscreen: '', src: 'https://www.google.com/maps/embed/v1/place?q=35.658581%2C139.745433&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY'}
+          %div.time
+            = "#{100 - n} min ago"
+
+
+    %nav.navbar.navbar-default.navbar-fixed-bottom
+      %input.form-control{type: 'text'}
+      %button.btn.btn-default{type: 'submit'}
+        送信
+
+:javascript
+  $(document).ready(function(){ window.scrollTo(0,document.body.scrollHeight); });
