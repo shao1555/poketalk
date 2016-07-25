@@ -12,5 +12,9 @@
 !/app-server/log/.keep
 /app-server/tmp
 
+# IDE
 /app-server/.idea
+
+# installed by Gemfile / Bowerfile
 /app-server/vendor/bundle
+/app-server/vendor/assets/bower_components
