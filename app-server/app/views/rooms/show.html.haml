@@ -29,9 +29,14 @@
 
 
     %nav.navbar.navbar-default.navbar-fixed-bottom
-      %input.form-control{type: 'text'}
-      %button.btn.btn-default{type: 'submit'}
-        送信
+      %div.message-composer
+        %textarea.form-control{placeholder: 'メッセージを入力', row: 1}
+        %button.btn.btn-default{type: 'submit'}
+          送信
+        %button.btn.btn-default
+          %i.fa.fa-photo
+        %button.btn.btn-default
+          %i.fa.fa-map-marker
 
 :javascript
   $(document).ready(function(){ window.scrollTo(0,document.body.scrollHeight); });
