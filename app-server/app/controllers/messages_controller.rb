@@ -1,15 +1,18 @@
 class MessagesController < ApplicationController
-  before_action :set_room
+  def index
+    @messages = Message.all
+    if params[:room_id].present?
+      room = Room.find(params[:room_id])
+      @messages = @messages.where(room: room)
+    end
+  end
 
   def create
-    @message = @room.messages.create(message_params.merge(user: session[:current_user]))
+    @message = current_user.messages.create(message_params)
+    render :show
   end
 
   def message_params
-    params.require(:message).permit(:body)
-  end
-
-  def set_room
-    @room = Room.find(params[:room_id])
+    params.require(:message).permit(:room_id, :body)
   end
 end

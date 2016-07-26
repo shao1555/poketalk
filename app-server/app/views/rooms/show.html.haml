@@ -1,4 +1,12 @@
-%div#room
+%div.template
+  %div#message-bubble-template
+    %div.message.message-received
+      %div.message-user-name
+      %div.message-body
+        %p.text
+      %div.time
+
+%div#room{data: { room_id: @room.id } }
   %div.talk-container.flex-layout-box
     %nav.navbar.navbar-default.navbar-fixed-top
       .container-fluid
@@ -9,34 +17,34 @@
           %li
             %a{href: '#'} range: 5km
 
-    - 100.times do |n|
-      - if n % 4 == 0
-        %div.message.message-sent
-          %div.message-user-name You
-          %div.message-body
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-      - else
-        %div.message.message-received
-          %div.message-user-name
-            = %w(john mike elly taro bill sam).sample
-          %div.message-body
-            %p
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            - if n % 10 == 1
-              %iframe.map{allowfullscreen: '', src: 'https://www.google.com/maps/embed/v1/place?q=35.658581%2C139.745433&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY'}
-          %div.time
-            = "#{100 - n} min ago"
-
+    %div.messages
 
     %nav.navbar.navbar-default.navbar-fixed-bottom
-      %div.message-composer
-        %textarea.form-control{placeholder: 'メッセージを入力', row: 1}
-        %button.btn.btn-default{type: 'submit'}
-          送信
+      = form_for @room.messages.new, format: :json, class: 'message-composer', remote: true do |f|
+        = f.text_area :body, class: 'form-control', row: 1, placeholder: 'メッセージを入力'
+        = f.hidden_field :room_id, value: @room.id
+        = f.submit '送信', class: 'btn btn-default'
+        - # 以下はハリボテ
         %button.btn.btn-default
           %i.fa.fa-photo
         %button.btn.btn-default
           %i.fa.fa-map-marker
 
 :javascript
-  $(document).ready(function(){ window.scrollTo(0,document.body.scrollHeight); });
+  $(document).ready(function(){
+    room_id = $('#room').data('room-id');
+    template = $('#message-bubble-template');
+    messages = $('#room .messages');
+    $.getJSON([ '/messages.json?room_id=', room_id ].join(''), function(data){
+      data['messages'].forEach(function(message_data){
+         message = template.clone();
+         message.find('.message-user-name').text(message_data['user']['name']);
+         message.find('.message-body p.text').text(message_data['body']);
+         message.find('.time').text(message_data['created_at']);
+         messages.append(message);
+      });
+    });
+
+    // すべてが終わったらスクロールさせる
+    window.scrollTo(0,document.body.scrollHeight)
+  });
