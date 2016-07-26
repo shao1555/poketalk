@@ -1,12 +1,12 @@
 %div.template
   %div#message-bubble-template
-    %div.message.message-received
+    %div.message
       %div.message-user-name
       %div.message-body
         %p.text
       %div.time
 
-%div#room{data: { room_id: @room.id } }
+%div#room{data: { room_id: @room.id, current_user_id: current_user.id } }
   %div.talk-container.flex-layout-box
     %nav.navbar.navbar-default.navbar-fixed-top
       .container-fluid
@@ -33,15 +33,23 @@
 :javascript
   $(document).ready(function(){
     room_id = $('#room').data('room-id');
+    current_user_id = $('#room').data('current-user-id');
     template = $('#message-bubble-template');
     messages = $('#room .messages');
     $.getJSON([ '/messages.json?room_id=', room_id ].join(''), function(data){
       data['messages'].forEach(function(message_data){
-         message = template.clone();
-         message.find('.message-user-name').text(message_data['user']['name']);
-         message.find('.message-body p.text').text(message_data['body']);
-         message.find('.time').text(message_data['created_at']);
-         messages.append(message);
+        message = template.clone();
+
+        if(message_data['user']['id'] == current_user_id) {
+          message.find('.message').addClass('message-sent');
+        } else {
+          message.find('.message').addClass('message-received');
+        }
+
+        message.find('.message-user-name').text(message_data['user']['name']);
+        message.find('.message-body p.text').text(message_data['body']);
+        message.find('.time').text(message_data['created_at']);
+        messages.append(message);
       });
     });
 

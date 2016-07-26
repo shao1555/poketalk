@@ -5,4 +5,8 @@ class Room
   has_many :messages
 
   field :name
+
+  def channel_name
+    "rooms/#{self.id}"
+  end
 end
