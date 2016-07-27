@@ -1,14 +1,19 @@
 REDIS_SERVER_HOST = 'localhost'
 REDIS_SERVER_PORT = 6379
+WEBSOCKET_SERVER_PORT = 8080
 
 # Redis
 redis = require 'redis'
-redis_client = redis.createClient REDIS_SERVER_PORT, REDIS_SERVER_HOST
+redisClient = redis.createClient REDIS_SERVER_PORT, REDIS_SERVER_HOST
 
 # WebSocket
-websocket = require 'websocket-server'
-websocket_server = websocket.createServer()
+webSocketServer = new require('ws').Server(port: WEBSOCKET_SERVER_PORT)
 
-redis_client.subscribe 'rooms/*'
-redis_client.on 'message', (channel, message) ->
-  websocket_server.broadcast(message)
+sessions = []
+
+#webSocketServer.on 'connection', (webSocket) ->
+
+redisClient.subscribe 'rooms/5795861ab905fe642d399838'
+redisClient.on 'message', (channel, message) ->
+  webSocketServer.clients.forEach (client) ->
+    client.send(message)

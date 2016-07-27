@@ -12,7 +12,7 @@ class Message
   def to_json
     builder = JbuilderTemplate.new(ApplicationController.new.view_context)
     builder.partial! 'messages/message', locals: { message: self }
-    ActiveSupport::JSON.decode(builder.target!)
+    builder.target!
   end
 
   def publish_to_redis

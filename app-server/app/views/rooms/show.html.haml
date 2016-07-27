@@ -32,27 +32,41 @@
 
 :javascript
   $(document).ready(function(){
-    room_id = $('#room').data('room-id');
-    current_user_id = $('#room').data('current-user-id');
+    roomId = $('#room').data('room-id');
+    currentUserId = $('#room').data('current-user-id');
     template = $('#message-bubble-template');
     messages = $('#room .messages');
-    $.getJSON([ '/messages.json?room_id=', room_id ].join(''), function(data){
-      data['messages'].forEach(function(message_data){
-        message = template.clone();
 
-        if(message_data['user']['id'] == current_user_id) {
-          message.find('.message').addClass('message-sent');
-        } else {
-          message.find('.message').addClass('message-received');
-        }
+    insertMessageBubble = function(messageData){
+      message = template.clone();
 
-        message.find('.message-user-name').text(message_data['user']['name']);
-        message.find('.message-body p.text').text(message_data['body']);
-        message.find('.time').text(message_data['created_at']);
-        messages.append(message);
+      if(messageData['user']['id'] == currentUserId) {
+        message.find('.message').addClass('message-sent');
+      } else {
+        message.find('.message').addClass('message-received');
+      }
+
+      message.find('.message-user-name').text(messageData['user']['name']);
+      message.find('.message-body p.text').text(messageData['body']);
+      message.find('.time').text(messageData['created_at']);
+      messages.append(message);
+      window.scrollTo(0, document.body.scrollHeight)
+    }
+
+    $.getJSON([ '/messages.json?room_id=', roomId ].join(''), function(data){
+      data['messages'].forEach(function(messageData){
+        insertMessageBubble(messageData);
       });
+    });
+    ws = new WebSocket("ws://127.0.0.1:8080/")
+    ws.addEventListener('message', function(event){
+      console.log(event.data);
+      messageData = JSON.parse(event.data);
+      insertMessageBubble(messageData);
+      if(messageData['body'] == $('#message_body').val()) {
+        $('#message_body').val('')
+      }
     });
 
     // すべてが終わったらスクロールさせる
-    window.scrollTo(0,document.body.scrollHeight)
   });
