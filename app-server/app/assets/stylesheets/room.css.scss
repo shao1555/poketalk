@@ -2,7 +2,18 @@ div.template {
   display: none;
 }
 
+div#cover {
+  display: none;
+  height: 100%;
+}
+
+div#wait-for-location {
+  display: none;
+  height: 100%;
+}
+
 div#room {
+  display: none;
   height: 100%;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 15px;

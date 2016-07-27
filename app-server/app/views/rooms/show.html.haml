@@ -6,6 +6,25 @@
         %p.text
       %div.time
 
+%div#cover
+  %p
+    現在地周辺の会話を表示します
+  %p
+    位置情報の提供を許可してください
+  %p
+    または以下のスポットを表示
+  %ul
+    %li 新宿御苑 (東京都新宿区)
+    %li 赤レンガ倉庫 (横浜市中区)
+    %li 鶴舞公園 (名古屋市昭和区)
+    %li 円山公園 (京都市東山区)
+    %li 大阪城公園 (大阪市中央区)
+    %li 大濠公園 (福岡市中央区)
+
+%div#wait-for-location
+  %p
+    現在地を特定中です ...
+
 %div#room{data: { room_id: @room.id, current_user_id: current_user.id } }
   %div.talk-container.flex-layout-box
     %nav.navbar.navbar-default.navbar-fixed-top
@@ -22,6 +41,9 @@
     %nav.navbar.navbar-default.navbar-fixed-bottom
       = form_for @room.messages.new, format: :json, class: 'message-composer', remote: true do |f|
         = f.text_area :body, class: 'form-control', row: 1, placeholder: 'メッセージを入力'
+        = f.fields_for :location do |location|
+          = location.hidden_field :latitude
+          = location.hidden_field :longitude
         = f.hidden_field :room_id, value: @room.id
         = f.submit '送信', class: 'btn btn-default'
         - # 以下はハリボテ
@@ -32,40 +54,84 @@
 
 :javascript
   $(document).ready(function(){
-    roomId = $('#room').data('room-id');
-    currentUserId = $('#room').data('current-user-id');
-    template = $('#message-bubble-template');
-    messages = $('#room .messages');
+    // 位置情報の準備
+    $('#cover').show();
 
-    insertMessageBubble = function(messageData){
-      message = template.clone();
+    if (navigator.geolocation) {
+      positionOptions = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+      watchPositionHandler = null;
+      positionOnSuccess = function(position){
+        updatePosition(position);
+        if ($('#cover').css('display') == 'block') {
+          $('#cover').hide();
+          $('#wait-for-location').show();
+          setTimeout(function(){
+            joinToRoom([longitude, latitude], true);
+            navigator.geolocation.clearWatch(watchPositionHandler);
+            // TODO: 起動後も1分おきぐらいに位置を更新していきたい
+          }, 5000);
+        }
 
-      if(messageData['user']['id'] == currentUserId) {
-        message.find('.message').addClass('message-sent');
-      } else {
-        message.find('.message').addClass('message-received');
+        console.log(position.coords);
       }
 
-      message.find('.message-user-name').text(messageData['user']['name']);
-      message.find('.message-body p.text').text(messageData['body']);
-      message.find('.time').text(messageData['created_at']);
-      messages.append(message);
-      window.scrollTo(0, document.body.scrollHeight)
+      positionOnError = function(positionError){
+        console.log(positionError);
+      }
+
+      updatePosition = function(position){
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        $('#message_location_latitude').val(latitude);
+        $('#message_location_longitude').val(longitude);
+      }
+
+      watchPositionHandler = navigator.geolocation.watchPosition(positionOnSuccess, positionOnError, positionOptions);
     }
 
-    $.getJSON([ '/messages.json?room_id=', roomId ].join(''), function(data){
-      data['messages'].forEach(function(messageData){
-        insertMessageBubble(messageData);
-      });
-    });
-    ws = new WebSocket("ws://127.0.0.1:8080/")
-    ws.addEventListener('message', function(event){
-      messageData = JSON.parse(event.data);
-      insertMessageBubble(messageData);
-      if(messageData['body'] == $('#message_body').val()) {
-        $('#message_body').val('')
+    joinToRoom = function(location, sensor) {
+      roomId = $('#room').data('room-id');
+      currentUserId = $('#room').data('current-user-id');
+      template = $('#message-bubble-template');
+      messages = $('#room .messages');
+
+      insertMessageBubble = function(messageData){
+        message = template.clone();
+
+        if(messageData['user']['id'] == currentUserId) {
+          message.find('.message').addClass('message-sent');
+        } else {
+          message.find('.message').addClass('message-received');
+        }
+
+        message.find('.message-user-name').text(messageData['user']['name']);
+        message.find('.message-body p.text').text(messageData['body']);
+        message.find('.time').text(messageData['created_at']);
+        messages.append(message);
+        window.scrollTo(0, document.body.scrollHeight)
       }
-    });
+
+      $.getJSON([ '/messages.json?room_id=', roomId, '&location=', location.join(',') ].join(''), function(data){
+        $('#cover').hide();
+        $('#wait-for-location').hide();
+        $('#room').show();
+        data['messages'].forEach(function(messageData){
+          insertMessageBubble(messageData);
+        });
+      });
+      ws = new WebSocket("ws://127.0.0.1:8080/")
+      ws.addEventListener('message', function(event){
+        messageData = JSON.parse(event.data);
+        insertMessageBubble(messageData);
+        if(messageData['body'] == $('#message_body').val()) {
+          $('#message_body').val('')
+        }
+      });
+    }
 
     // すべてが終わったらスクロールさせる
   });

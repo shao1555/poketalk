@@ -1,11 +1,13 @@
 class Message
   include Mongoid::Document
+  include Mongoid::Geospatial
   include Mongoid::Timestamps::Created
 
   belongs_to :room
   belongs_to :user
 
   field :body
+  field :location, type: Point
 
   after_create :publish_to_redis
 

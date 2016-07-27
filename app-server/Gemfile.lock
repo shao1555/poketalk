@@ -97,6 +97,8 @@ GEM
       mongo (~> 2.1)
       origin (~> 2.2)
       tzinfo (>= 0.3.37)
+    mongoid-geospatial (5.0.0)
+      mongoid (>= 5.0.0.beta)
     multi_json (1.12.1)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
@@ -203,6 +205,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mongoid (~> 5)
+  mongoid-geospatial
   rails (= 4.2.7)
   redis-rails
   sass-rails (~> 5.0)
