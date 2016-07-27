@@ -7,6 +7,6 @@ class Room
   field :name
 
   def channel_name
-    "rooms/#{self.id}"
+    "rooms.#{self.id}"
   end
 end

@@ -13,7 +13,7 @@ sessions = []
 
 #webSocketServer.on 'connection', (webSocket) ->
 
-redisClient.subscribe 'rooms/5795861ab905fe642d399838'
-redisClient.on 'message', (channel, message) ->
+redisClient.psubscribe 'rooms.*'
+redisClient.on 'pmessage', (channel, pattern, message) ->
   webSocketServer.clients.forEach (client) ->
     client.send(message)

@@ -60,7 +60,6 @@
     });
     ws = new WebSocket("ws://127.0.0.1:8080/")
     ws.addEventListener('message', function(event){
-      console.log(event.data);
       messageData = JSON.parse(event.data);
       insertMessageBubble(messageData);
       if(messageData['body'] == $('#message_body').val()) {
