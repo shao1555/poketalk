@@ -19,4 +19,7 @@
 /app-server/vendor/bundle
 /app-server/vendor/assets/bower_components
 
+# dot-env
+/app-server/.env
+
 /channel-server/node_modules
