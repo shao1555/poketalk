@@ -50,8 +50,7 @@
         = f.hidden_field :room_id, value: @room.id
         = f.submit '送信', class: 'btn btn-default'
         - # 以下はハリボテ
-        %button.btn.btn-default
-          %i.fa.fa-photo
+        %input#image-picker.btn.btn-default{type: :file}
         %button.btn.btn-default
           %i.fa.fa-map-marker
 

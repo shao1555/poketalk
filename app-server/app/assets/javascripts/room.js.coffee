@@ -1,3 +1,5 @@
+#= require image_processor
+
 $(document).ready ->
   # 位置情報の準備
   $('#cover').show()
@@ -7,6 +9,7 @@ $(document).ready ->
       timeout: 5000
       maximumAge: 0
     watchPositionHandler = null
+    latitude = longitude = null
 
     positionOnSuccess = (position) ->
       updatePosition position
@@ -71,3 +74,19 @@ $(document).ready ->
       insertMessageBubble messageData
       if messageData['body'] == $('#message_body').val()
         $('#message_body').val ''
+
+  $('#image-picker').on 'change', (event) ->
+    if event.target.files[0]
+      getResizedImageBlob event.target.files[0], (blob) ->
+        # ref: http://dev.classmethod.jp/cloud/aws/s3-cors-upload/
+        $.getJSON '/image_upload_tickets/new.json', (data) ->
+          presigned_url = data['image_upload_ticket']['presigned_url']
+          xhr = new XMLHttpRequest
+          xhr.open 'put', presigned_url, true
+          xhr.send blob
+          xhr.onload = ->
+            # TODO: アップロード成功/失敗の正しいハンドリング、UIフィードバック
+            console.log 'uploaded!'
+      # ファイルの多重アップロードを防止する
+      $(this).val(null)
+
