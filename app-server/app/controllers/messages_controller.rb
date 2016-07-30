@@ -13,6 +13,6 @@ class MessagesController < ApplicationController
   end
 
   def message_params
-    params.require(:message).permit(:room_id, :body, location: %i(latitude longitude))
+    params.require(:message).permit(:room_id, :body, :location_visible, :image_url, location: %i(latitude longitude))
   end
 end

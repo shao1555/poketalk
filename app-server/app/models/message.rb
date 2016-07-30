@@ -8,6 +8,8 @@ class Message
 
   field :body
   field :location, type: Point
+  field :image_url
+  field :location_visible, type: Boolean
 
   after_create :publish_to_redis
 

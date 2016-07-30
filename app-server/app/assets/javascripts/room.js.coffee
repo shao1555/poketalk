@@ -1,6 +1,10 @@
 #= require image_processor
 
+#POSITION_INITIALIZATION_SLEEPS = 5000
+POSITION_INITIALIZATION_SLEEPS = 1000
+
 $(document).ready ->
+  shareLocation = false
   # 位置情報の準備
   $('#cover').show()
   if navigator.geolocation
@@ -24,7 +28,7 @@ $(document).ready ->
           navigator.geolocation.clearWatch watchPositionHandler
           # TODO: 起動後も1分おきぐらいに位置を更新していきたい
           return
-        ), 5000
+        ), POSITION_INITIALIZATION_SLEEPS
       console.log position.coords
 
     positionOnError = (positionError) ->
@@ -74,9 +78,19 @@ $(document).ready ->
       insertMessageBubble messageData
       if messageData['body'] == $('#message_body').val()
         $('#message_body').val ''
+        $('#image-picker-button').removeClass('btn-success')
+        $('#image-picker-button').addClass('btn-default')
+        $('#image-picker-button').prop('disabled', false)
+        $('#message_image_url').val('')
+        $('#location-button').removeClass('btn-success')
+        $('#location-button').addClass('btn-default')
+        $('#message_location_visible').val('false')
 
   $('#image-picker').on 'change', (event) ->
     if event.target.files[0]
+      $('#image-picker-button i').removeClass('fa-file-picture-o')
+      $('#image-picker-button i').addClass('fa-spinner')
+      $('#image-picker-button i').addClass('fa-pulse')
       getResizedImageBlob event.target.files[0], (blob) ->
         # ref: http://dev.classmethod.jp/cloud/aws/s3-cors-upload/
         $.getJSON '/image_upload_tickets/new.json', (data) ->
@@ -85,8 +99,32 @@ $(document).ready ->
           xhr.open 'put', presigned_url, true
           xhr.send blob
           xhr.onload = ->
-            # TODO: アップロード成功/失敗の正しいハンドリング、UIフィードバック
-            console.log 'uploaded!'
+            # TODO: アップロード成功/失敗の正しいハンドリング
+            $('#image-picker-button').removeClass('btn-default')
+            $('#image-picker-button').addClass('btn-success')
+
+            $('#image-picker-button i').removeClass('fa-spinner')
+            $('#image-picker-button i').removeClass('fa-pulse')
+            $('#image-picker-button i').addClass('fa-file-picture-o')
+
+            $('#message_image_url').val(data['image_upload_ticket']['resource_url'])
       # ファイルの多重アップロードを防止する
       $(this).val(null)
+      $(this).prop('disabled', true)
 
+  $('#image-picker-button').on 'click', (event) ->
+    if $('#image-picker').prop('disabled')
+      $('#image-picker-button').removeClass('btn-success')
+      $('#image-picker-button').addClass('btn-default')
+      $('#image-picker-button').prop('disabled', false)
+      $('#message_image_url').val('')
+
+  $('#location-button').on 'click', (event) ->
+    if $('#message_location_visible').val() == 'false'
+      $(this).removeClass('btn-default')
+      $(this).addClass('btn-success')
+      $('#message_location_visible').val('true')
+    else
+      $(this).removeClass('btn-success')
+      $(this).addClass('btn-default')
+      $('#message_location_visible').val('false')

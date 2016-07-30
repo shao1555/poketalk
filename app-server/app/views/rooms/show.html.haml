@@ -42,15 +42,20 @@
     %div.messages
 
     %nav.navbar.navbar-default.navbar-fixed-bottom
-      = form_for @room.messages.new, format: :json, class: 'message-composer', remote: true do |f|
+      = form_for @room.messages.new, format: :json, html: {class: 'message-composer'}, remote: true do |f|
         = f.text_area :body, class: 'form-control', row: 1, placeholder: 'メッセージを入力'
         = f.fields_for :location do |location|
           = location.hidden_field :latitude
           = location.hidden_field :longitude
         = f.hidden_field :room_id, value: @room.id
+        = f.hidden_field :location_visible, value: 'false'
+        = f.hidden_field :image_url, value: nil
+
         = f.submit '送信', class: 'btn btn-default'
         - # 以下はハリボテ
+        %label#image-picker-button.btn.btn-default{for: 'image-picker'}
+          %i.fa.fa-file-picture-o
         %input#image-picker.btn.btn-default{type: :file}
-        %button.btn.btn-default
-          %i.fa.fa-map-marker
+        %a#location-button.btn.btn-default
+          %i.fa.fa-map-pin
 
