@@ -11,10 +11,7 @@ webSocketServer = new require('ws').Server(port: WEBSOCKET_SERVER_PORT)
 
 # URL
 url = require 'url'
-
 sessions = []
-
-#webSocketServer.on 'connection', (webSocket) ->
 
 redisClient.psubscribe 'rooms.*'
 redisClient.on 'pmessage', (channel, pattern, message) ->
@@ -31,7 +28,6 @@ redisClient.on 'pmessage', (channel, pattern, message) ->
       client.send(JSON.stringify(data)) if distance < parseFloat(clientUrl.query['distance'])
     else
       client.send(JSON.stringify(data))
-
 
 # 緯度経度の計算
 getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) ->
