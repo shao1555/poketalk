@@ -5,7 +5,11 @@ if message
   end
   json.body message.body
   json.created_at message.created_at
-  json.location message.location_visible ? message.location : nil
+  if filter
+    json.location message.location_visible ? message.location : nil
+  else
+    json.extract! message, :location_visible, :location
+  end
   json.image_url message.image_url
 else
   json.null!

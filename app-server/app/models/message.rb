@@ -7,7 +7,7 @@ class Message
   belongs_to :user
 
   field :body
-  field :location, type: Point
+  field :location, type: Point, sphere: true
   field :image_url
   field :location_visible, type: Boolean
 
@@ -15,7 +15,7 @@ class Message
 
   def to_json
     builder = JbuilderTemplate.new(ApplicationController.new.view_context)
-    builder.partial! 'messages/message', locals: { message: self }
+    builder.partial! 'messages/message', locals: { message: self, filter: false }
     builder.target!
   end
 

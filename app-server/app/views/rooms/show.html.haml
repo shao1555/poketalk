@@ -30,7 +30,7 @@
   %p
     現在地を特定中です ...
 
-%div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id) } }
+%div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id), distance: 5 } }
   %div.talk-container.flex-layout-box
     %nav.navbar.navbar-default.navbar-fixed-top
       .container-fluid
@@ -52,9 +52,7 @@
         = f.hidden_field :room_id, value: @room.id
         = f.hidden_field :location_visible, value: 'false'
         = f.hidden_field :image_url, value: nil
-
         = f.submit '送信', class: 'btn btn-default'
-        - # 以下はハリボテ
         %label#image-picker-button.btn.btn-default{for: 'image-picker'}
           %i.fa.fa-file-picture-o
         %input#image-picker.btn.btn-default{type: :file}

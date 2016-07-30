@@ -1,0 +1,14 @@
+%div.message
+  %div.message-user-name
+    = @message.user.try(:name)
+  %div.message-body
+    %p.text
+      = @message.body
+    - if @message.image_url.present?
+      %div.image-attachment
+        %img{src: @message.image_url}
+    - if @message.location && @message.location_visible
+      %div.map
+        %iframe{src: "https://www.google.com/maps/embed/v1/place?q=#{@message.location[1]}%2C#{@message.location[0]}&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY"}
+  %div.time
+    = I18n.l(@message.created_at, format: :short)

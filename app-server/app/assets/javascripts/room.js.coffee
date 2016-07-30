@@ -47,6 +47,7 @@ $(document).ready ->
   joinToRoom = (location, sensor) ->
     roomId = $('#room').data('room-id')
     currentUserId = $('#room').data('current-user-id')
+    distance = $('#room').data('distance')
     template = $('#message-bubble-template')
     messages = $('#room .messages')
 
@@ -56,11 +57,11 @@ $(document).ready ->
       $('.user-sign-up').css('display', 'inline-flex')
 
     insertMessageBubble = (messageData) ->
-      message = template.clone()
+      message = template.children().clone()
       if messageData['user']['id'] == currentUserId
-        message.find('.message').addClass 'message-sent'
+        message.addClass 'message-sent'
       else
-        message.find('.message').addClass 'message-received'
+        message.addClass 'message-received'
       message.find('.message-user-name').text messageData['user']['name']
       message.find('.message-body p.text').text messageData['body']
       message.find('.time').text messageData['created_at']
@@ -69,36 +70,64 @@ $(document).ready ->
         image.attr('src', messageData['image_url'])
         message.find('.image-attachment').append(image)
       if messageData['location']
-        map = $('<iframe>')
-        map.attr('src', "https://www.google.com/maps/embed/v1/place?q=#{messageData['location'][1]}%2C#{messageData['location'][0]}&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY")
-        message.find('.map').append(map)
+        mapLink = $('<a>')
+        mapLink.attr('href', "/messages/#{messageData['id']}")
+        mapLink.attr('target', '_blank')
+        mapLink.text('位置情報あり')
+        message.find('.map').append(mapLink)
       messages.append message
       window.scrollTo 0, document.body.scrollHeight
+
+
+    webSocketReconnectHandler = null
+
+    createWebSocketChannel = () ->
+      ws = null
+      $.getJSON [
+        '/channel_sessions/new.json?room_id='
+        roomId
+        '&location='
+        location.join(',')
+        '&distance='
+        distance
+      ].join(''), (data) ->
+        ws = new WebSocket(data['channel_session']['url'])
+        ws.addEventListener 'open', (event) ->
+          console.log 'connected'
+          if webSocketReconnectHandler
+            clearInterval(webSocketReconnectHandler)
+            webSocketReconnectHandler = null
+        ws.addEventListener 'message', (event) ->
+          messageData = JSON.parse(event.data)
+          insertMessageBubble messageData
+          if messageData['body'] == $('#message_body').val()
+            $('#message_body').val ''
+            $('#image-picker-button').removeClass('btn-success')
+            $('#image-picker-button').addClass('btn-default')
+            $('#image-picker-button').prop('disabled', false)
+            $('#message_image_url').val('')
+            $('#location-button').removeClass('btn-success')
+            $('#location-button').addClass('btn-default')
+            $('#message_location_visible').val('false')
+        ws.addEventListener 'close', (event) ->
+          console.log 'disconnected'
+          if !webSocketReconnectHandler
+            webSocketReconnectHandler = setInterval(createWebSocketChannel, 5000)
 
     $.getJSON [
       '/messages.json?room_id='
       roomId
       '&location='
       location.join(',')
+      '&distance='
+      distance
     ].join(''), (data) ->
       $('#cover').hide()
       $('#wait-for-location').hide()
       $('#room').show()
       data['messages'].forEach (messageData) ->
         insertMessageBubble messageData
-    ws = new WebSocket('ws://127.0.0.1:8080/')
-    ws.addEventListener 'message', (event) ->
-      messageData = JSON.parse(event.data)
-      insertMessageBubble messageData
-      if messageData['body'] == $('#message_body').val()
-        $('#message_body').val ''
-        $('#image-picker-button').removeClass('btn-success')
-        $('#image-picker-button').addClass('btn-default')
-        $('#image-picker-button').prop('disabled', false)
-        $('#message_image_url').val('')
-        $('#location-button').removeClass('btn-success')
-        $('#location-button').addClass('btn-default')
-        $('#message_location_visible').val('false')
+      createWebSocketChannel()
 
   $('#image-picker').on 'change', (event) ->
     if event.target.files[0]

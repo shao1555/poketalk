@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   resources :rooms, only: %i(index show)
-  resources :messages, only: %i(index create)
+  resources :messages, only: %i(index create show)
   resources :image_upload_tickets, only: %i(new)
   resources :users, only: %i(create)
+  resources :channel_sessions, only: %i(new)
 end
