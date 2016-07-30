@@ -58,6 +58,14 @@ $(document).ready ->
       message.find('.message-user-name').text messageData['user']['name']
       message.find('.message-body p.text').text messageData['body']
       message.find('.time').text messageData['created_at']
+      if messageData['image_url']
+        image = $('<img>')
+        image.attr('src', messageData['image_url'])
+        message.find('.image-attachment').append(image)
+      if messageData['location']
+        map = $('<iframe>')
+        map.attr('src', "https://www.google.com/maps/embed/v1/place?q=#{messageData['location'][1]}%2C#{messageData['location'][0]}&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY")
+        message.find('.map').append(map)
       messages.append message
       window.scrollTo 0, document.body.scrollHeight
 

@@ -5,6 +5,8 @@ if message
   end
   json.body message.body
   json.created_at message.created_at
+  json.location message.location_visible ? message.location : nil
+  json.image_url message.image_url
 else
   json.null!
 end
