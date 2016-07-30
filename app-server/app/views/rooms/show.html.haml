@@ -30,7 +30,7 @@
   %p
     現在地を特定中です ...
 
-%div#room{data: { room_id: @room.id, current_user_id: current_user.id } }
+%div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id) } }
   %div.talk-container.flex-layout-box
     %nav.navbar.navbar-default.navbar-fixed-top
       .container-fluid
@@ -44,7 +44,7 @@
     %div.messages
 
     %nav.navbar.navbar-default.navbar-fixed-bottom
-      = form_for @room.messages.new, format: :json, html: {class: 'message-composer'}, remote: true do |f|
+      = form_for @room.messages.new, format: :json, html: { class: 'message-composer' }, remote: true do |f|
         = f.text_area :body, class: 'form-control', row: 1, placeholder: 'メッセージを入力'
         = f.fields_for :location do |location|
           = location.hidden_field :latitude
@@ -60,4 +60,6 @@
         %input#image-picker.btn.btn-default{type: :file}
         %a#location-button.btn.btn-default
           %i.fa.fa-map-pin
-
+      = form_for User.new, format: :json, html: { class: 'user-sign-up' }, remote: true do |f|
+        = f.text_field :name, class: 'form-control', placeholder: 'ニックネームを入力'
+        = f.submit 'チャットに参加', class: 'btn btn-default'

@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
 
   def current_user
-    # stub
-    User.first
+    User.where(id: session[:current_user_id]).first
   end
 end

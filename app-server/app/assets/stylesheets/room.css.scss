@@ -74,7 +74,7 @@ div#room {
   }
 
   .message-composer {
-    display: inline-flex;
+    display: none;
 
     label[for='image-picker'], a {
       line-height: 40px;
@@ -83,5 +83,9 @@ div#room {
     #image-picker {
       display: none;
     }
+  }
+
+  .user-sign-up {
+    display: none;
   }
 }

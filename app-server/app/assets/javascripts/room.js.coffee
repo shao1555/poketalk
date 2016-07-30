@@ -5,6 +5,7 @@ POSITION_INITIALIZATION_SLEEPS = 1000
 
 $(document).ready ->
   shareLocation = false
+  currentUserId = null
   # 位置情報の準備
   $('#cover').show()
   if navigator.geolocation
@@ -48,6 +49,11 @@ $(document).ready ->
     currentUserId = $('#room').data('current-user-id')
     template = $('#message-bubble-template')
     messages = $('#room .messages')
+
+    if currentUserId
+      $('.message-composer').css('display', 'inline-flex')
+    else
+      $('.user-sign-up').css('display', 'inline-flex')
 
     insertMessageBubble = (messageData) ->
       message = template.clone()
@@ -136,3 +142,8 @@ $(document).ready ->
       $(this).removeClass('btn-success')
       $(this).addClass('btn-default')
       $('#message_location_visible').val('false')
+
+  $('#new_user').on 'ajax:success', (event, data, status) ->
+    currentUserId = data['user']['id']
+    $('.message-composer').css('display', 'inline-flex')
+    $('.user-sign-up').css('display', 'none')
