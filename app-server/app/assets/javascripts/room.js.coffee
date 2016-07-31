@@ -63,7 +63,8 @@ $(document).ready ->
         message.addClass 'message-received'
       message.find('.message-user-name').text messageData['user']['name']
       message.find('.message-body p.text').text messageData['body']
-      message.find('.time').text messageData['created_at']
+      message.find('.permalink').attr('href', "/messages/#{messageData['id']}")
+      message.find('.time').text moment(messageData['created_at']).format('YY/MM/DD HH:mm')
       if messageData['image_url']
         imageLink = $('<a>')
         imageLink.attr('href', "/messages/#{messageData['id']}")

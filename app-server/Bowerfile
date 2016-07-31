@@ -3,3 +3,4 @@
 
 asset 'bootstrap'
 asset 'font-awesome'
+asset 'momentjs'
