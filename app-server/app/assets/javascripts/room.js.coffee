@@ -1,7 +1,6 @@
 #= require image_processor
 
-#POSITION_INITIALIZATION_SLEEPS = 5000
-POSITION_INITIALIZATION_SLEEPS = 1000
+POSITION_INITIALIZATION_SLEEPS = 3000
 
 $(document).ready ->
   shareLocation = false
@@ -30,10 +29,9 @@ $(document).ready ->
           # TODO: 起動後も1分おきぐらいに位置を更新していきたい
           return
         ), POSITION_INITIALIZATION_SLEEPS
-      console.log position.coords
 
     positionOnError = (positionError) ->
-      console.log positionError
+      # TODO: エラーダイアログ
 
     updatePosition = (position) ->
       latitude = position.coords.latitude
@@ -57,6 +55,7 @@ $(document).ready ->
       $('.user-sign-up').css('display', 'inline-flex')
 
     insertMessageBubble = (messageData) ->
+      $('.empty-view').hide();
       message = template.children().clone()
       if messageData['user']['id'] == currentUserId
         message.addClass 'message-sent'

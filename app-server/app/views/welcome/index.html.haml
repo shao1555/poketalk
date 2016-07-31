@@ -4,7 +4,7 @@
   %div.go-dialog
     %p 近くのトレーナーと攻略情報を交換しよう
     %p ポケモンGOに最適！
-    %a.button{href: '#'} いますぐ参加
+    = link_to 'いますぐ参加', {controller: :rooms, action: :show, id: @room.name}, class: 'button'
 
   %div.text
     %h2 できること
@@ -23,7 +23,7 @@
 
   %div.go-dialog
     %p アプリのインストール、登録一切不要！
-    %a.button{href: '#'} いますぐ参加
+    = link_to 'いますぐ参加', {controller: :rooms, action: :show, id: @room.name}, class: 'button'
 
   %div.text
     %h2 お知らせ

@@ -12,23 +12,24 @@
       %div.time
 
 %div#cover
+  %header
+    PokéTalk - ポケトーク
   %p
     現在地周辺の会話を表示します
   %p
-    位置情報の提供を許可してください
+    %i.fa.fa-spinner.fa-spin
   %p
-    または以下のスポットを表示
-  %ul
-    %li 新宿御苑 (東京都新宿区)
-    %li 赤レンガ倉庫 (横浜市中区)
-    %li 鶴舞公園 (名古屋市昭和区)
-    %li 円山公園 (京都市東山区)
-    %li 大阪城公園 (大阪市中央区)
-    %li 大濠公園 (福岡市中央区)
+    位置情報の提供を許可してください
 
 %div#wait-for-location
+  %header
+    PokéTalk - ポケトーク
   %p
-    現在地を特定中です ...
+    現在地周辺の会話を表示します
+  %p
+    %i.fa.fa-spinner.fa-spin
+  %p
+    位置情報を受信中です。もう少しお待ちください。
 
 %div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id), distance: 5 } }
   %div.talk-container.flex-layout-box
@@ -42,6 +43,11 @@
             %a{href: '#'} range: 5km
 
     %div.messages
+      .empty-view
+        %p
+          周辺での発言はまだありません
+        %p
+          チャットに参加し、あなたの近くでみつけたポケモンを投稿してみましょう
 
     %nav.navbar.navbar-default.navbar-fixed-bottom
       = form_for @room.messages.new, format: :json, html: { class: 'message-composer' }, remote: true do |f|

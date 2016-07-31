@@ -2,15 +2,31 @@ div.template {
   display: none;
 }
 
-div#cover {
+div#cover, div#wait-for-location {
   display: none;
   height: 100%;
+
+  p {
+    text-align: center;
+    margin: 1em 0;
+
+    .fa {
+      font-size: 400%;
+    }
+  }
+
+  header {
+    background-image: image-url('poketalk_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    background-position-x: center;
+    text-indent: -1000em;
+    margin-top: 2em;
+    height: 70px;
+    width: 100%;
+  }
 }
 
-div#wait-for-location {
-  display: none;
-  height: 100%;
-}
 
 div#room {
   display: none;
@@ -25,6 +41,17 @@ div#room {
     padding-bottom: 70px;
   }
 
+  .empty-view {
+    text-align: center;
+    vertical-align: middle;
+    padding: 3em 1em;
+    margin: 2em;
+    border: 1px solid #f00;
+
+    p {
+      line-height: 1.8em;
+    }
+  }
 
   .message {
     margin: 1em 1em 2em 1em ;

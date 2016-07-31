@@ -9,6 +9,6 @@ class RoomsController < ApplicationController
   end
 
   def set_room
-    @room = Room.find(params[:id])
+    @room = params[:id] =~ /[0-9a-f]{24}/ ? Room.find(params[:id]) : Room.find_by(name: params[:id])
   end
 end

@@ -12,7 +12,7 @@ class Message
   field :location_visible, type: Boolean, default: false
 
   validates_presence_of :body, if: -> { !location_visible && image_url.blank? }
-  validates_format_of :image_url, with: /\A#{Regexp.escape(ImageUploadTicketsController::RESOURCE_URL)}.*\z/
+  validates_format_of :image_url, with: /\A#{Regexp.escape(ImageUploadTicketsController::RESOURCE_URL)}.*\z/, allow_blank: true
 
   after_create :publish_to_redis
 
