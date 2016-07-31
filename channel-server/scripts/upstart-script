@@ -1,0 +1,20 @@
+description 'Poketalk channel server'
+
+start on runlevel [2345]
+stop on shutdown
+
+setuid poketalk
+env HOME=/home/poketalk
+env SSL_SERVER_KEY_PATH=/etc/ssl/certs/poketalk/key.pem
+env SSL_SERVER_CERT_PATH=/etc/ssl/certs/poketalk/cert.pem
+env WSS_SERVER_PORT=8443
+env REDIS_SERVER_HOST=pubsub01.dc01.poketalk.jp
+
+respawn
+respawn limit 10 5
+
+chdir /var/www/poketalk/channel-server
+
+script
+  exec node_modules/.bin/coffee app.coffee >> /var/www/poketalk/log/channel-server.log 2>&1
+end script

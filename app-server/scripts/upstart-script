@@ -1,0 +1,17 @@
+description 'Poketalk app server'
+
+start on runlevel [2345]
+stop on shutdown
+
+setuid poketalk
+env HOME=/home/poketalk
+
+respawn
+
+expect fork
+
+chdir /var/www/poketalk/app-server
+
+script
+  exec /usr/local/rvm/wrappers/ruby-2.3.1/bundle exec passenger start
+end script
