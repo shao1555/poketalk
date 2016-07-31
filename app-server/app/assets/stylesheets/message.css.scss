@@ -1,0 +1,88 @@
+#single-message {
+  h1 {
+    background-image: image-url('poketalk_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    background-position-x: center;
+    width: 100%;
+    height: 60px;
+    text-indent: -1000em;
+    font-size: 1px;
+    margin: auto;
+  }
+
+  .message {
+    margin: 1em 1em 2em 1em ;
+
+    .message-user-name {
+      font-weight: bold;
+    }
+
+    .message-body {
+      background-color: #e7e7e7;
+      border-radius: 0.35em;
+      padding: 0.5em;
+      text-align: left;
+      align-items: center;
+
+      p {
+        margin: 0;
+        display: block;
+        width: 100%;
+      }
+
+      .image-attachment img, .map iframe {
+        width: 100%;
+      }
+    }
+    .time {
+      text-align: right;
+      color: #3c3c3c;
+      font-size: 13px;
+    }
+  }
+
+  .go-dialog {
+    max-width: 450px;
+    margin: 10px auto;
+    background-color: rgba(243, 255, 255, 0.9);
+    border-radius: 4px;
+    padding: 30px;
+    color: rgb(66, 100, 100);
+
+    p {
+      text-align: center;
+      font-size: 10pt;
+    }
+
+    .button {
+      display: block;
+      text-align: center;
+      width: 100%;
+      background: #a9d996;
+      background-image: linear-gradient(to right, #a9d996, #26c9a6);
+      border-radius: 28px;
+      color: #ffffff;
+      font-size: 12pt;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+  }
+
+  footer {
+    background-color: #3c3c3c;
+    color: rgb(243, 255, 255);
+    padding: 1em 0;
+
+    p {
+      text-align: center;
+      margin-bottom: 1em;
+      line-height: 1em;
+    }
+
+    a, a:hover, a:visited {
+      color: rgb(243, 255, 255);
+      text-decoration: underline;
+    }
+  }
+}

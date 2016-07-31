@@ -1,14 +1,32 @@
-%div.message
-  %div.message-user-name
-    = @message.user.try(:name)
-  %div.message-body
-    %p.text
-      = @message.body
-    - if @message.image_url.present?
-      %div.image-attachment
-        %img{src: @message.image_url}
-    - if @message.location && @message.location_visible
-      %div.map
-        %iframe{src: "https://www.google.com/maps/embed/v1/place?q=#{@message.location[1]}%2C#{@message.location[0]}&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY"}
-  %div.time
-    = I18n.l(@message.created_at, format: :short)
+%div#single-message
+  = link_to root_path do
+    %header
+      %h1 PokéTalk - ポケトーク
+  .content
+    %div.message
+      %div.message-user-name
+        = @message.user.try(:name)
+      %div.message-body
+        %p.text
+          = @message.body
+        - if @message.image_url.present?
+          %div.image-attachment
+            %img{src: @message.image_url}
+        - if @message.location && @message.location_visible
+          %div.map
+            %iframe{src: "https://www.google.com/maps/embed/v1/place?q=#{@message.location[1]}%2C#{@message.location[0]}&key=AIzaSyA82ZgwRZlALXKLqlrOZGHoMaeFaA8gGRY"}
+          %p
+            = link_to 'Google マップで開く', "https://www.google.com/maps?q=#{@message.location[1]}%2C#{@message.location[0]}", target: '_blank'
+      %div.time
+        = I18n.l(@message.created_at, format: :short)
+  %div.go-dialog
+    %p PokéTalk (ポケトーク) は近くのポケモンGOユーザーとチャットできるサービスです
+    = link_to 'いますぐ参加', {controller: :rooms, action: :show, id: @message.room.name}, class: 'button'
+  %footer
+    %p PokéTalk - ポケトーク
+    %p
+      ©
+      %a{href:'https://twitter.com/shao1555'} shao1555
+      —
+      %a{href:'poketalk@shao.jp'} 開発者に連絡
+

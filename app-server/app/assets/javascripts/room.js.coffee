@@ -65,9 +65,13 @@ $(document).ready ->
       message.find('.message-body p.text').text messageData['body']
       message.find('.time').text messageData['created_at']
       if messageData['image_url']
+        imageLink = $('<a>')
+        imageLink.attr('href', "/messages/#{messageData['id']}")
+        imageLink.attr('target', '_blank')
         image = $('<img>')
         image.attr('src', messageData['image_url'])
-        message.find('.image-attachment').append(image)
+        imageLink.append(image)
+        message.find('.image-attachment').append(imageLink)
       if messageData['location']
         mapLink = $('<a>')
         mapLink.attr('href', "/messages/#{messageData['id']}")

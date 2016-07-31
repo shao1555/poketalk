@@ -4,7 +4,7 @@ getResizedImageBlob = (file, callback) ->
     return
   img = new Image
   reader = new FileReader
-  maxWidth = maxHeight = 300
+  maxWidth = maxHeight = 800
 
   reader.onload = (e) ->
     data = e.target.result
