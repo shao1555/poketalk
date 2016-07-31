@@ -76,4 +76,4 @@
           %i.fa.fa-map-pin
       = form_for User.new, format: :json, html: { class: 'user-sign-up' }, remote: true do |f|
         = f.text_field :name, class: 'form-control', placeholder: 'ニックネームを入力'
-        = f.submit 'チャットに参加', class: 'btn btn-default'
+        = f.submit 'チャットに参加', class: 'btn btn-default', style: 'min-width: 9em;'
