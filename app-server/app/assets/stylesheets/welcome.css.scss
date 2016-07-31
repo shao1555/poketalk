@@ -1,3 +1,102 @@
 div#welcome {
+  background-size: contain;
+  background-repeat: no-repeat no-repeat;
+  background-image: image-url('welcome/go_teams.png');
+  padding: 10px 0 0;
 
+  h1 {
+    background-image: image-url('poketalk_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    max-width: 358px;
+    height: 150px;
+    text-indent: -1000em;
+    font-size: 1px;
+    margin: auto;
+  }
+
+  .go-dialog {
+    max-width: 450px;
+    margin: 10px auto;
+    background-color: rgba(243, 255, 255, 0.9);
+    border-radius: 4px;
+    padding: 30px;
+    color: rgb(66, 100, 100);
+
+    p {
+      text-align: center;
+      font-size: 10pt;
+    }
+
+    .button {
+      display: block;
+      text-align: center;
+      width: 100%;
+      background: #a9d996;
+      background-image: linear-gradient(to right, #a9d996, #26c9a6);
+      border-radius: 28px;
+      color: #ffffff;
+      font-size: 12pt;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+    }
+  }
+
+  .text {
+    color: rgb(66, 100, 100);
+
+
+    h2 {
+      text-align: center;
+      color: rgb(243, 255, 255);
+      font-size: 14pt;
+      padding: 0.4em;
+      background-color: rgba(240, 75, 95, 0.9);
+
+    }
+
+    h3 {
+      margin: 20px auto;
+      width: 90%;
+
+    }
+
+    p, ul {
+      margin: 10px auto;
+      width: 85%;
+
+    }
+
+    p {
+      font-size: 10pt;
+      line-height: 2em;
+    }
+
+    ul {
+      padding-left: 0;
+      list-style-type: none;
+    }
+
+    li {
+      font-size: 9pt;
+      margin-bottom: 1em;
+    }
+  }
+
+  footer {
+    background-color: #3c3c3c;
+    color: rgb(243, 255, 255);
+    padding: 1em 0;
+
+    p {
+      text-align: center;
+      margin-bottom: 1em;
+      line-height: 1em;
+    }
+
+    a, a:hover, a:visited {
+      color: rgb(243, 255, 255);
+      text-decoration: underline;
+    }
+  }
 }

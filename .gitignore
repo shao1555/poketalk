@@ -23,3 +23,6 @@
 /app-server/.env
 
 /channel-server/node_modules
+
+# OSX
+.DS_Store
