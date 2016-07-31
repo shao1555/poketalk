@@ -1,17 +1,41 @@
-REDIS_SERVER_HOST = 'localhost'
-REDIS_SERVER_PORT = 6379
-WEBSOCKET_SERVER_PORT = 8080
+# dotenv
+require('dotenv').config()
+
+REDIS_SERVER_HOST = process.env.REDIS_SERVER_HOST || 'localhost'
+REDIS_SERVER_PORT = process.env.REDIS_SERVER_PORT || 6379
+WSS_SERVER_PORT = process.env.WSS_SERVER_PORT || 443
 
 # Redis
 redis = require 'redis'
 redisClient = redis.createClient REDIS_SERVER_PORT, REDIS_SERVER_HOST
 
+# HTTPS Server
+https = require 'https'
+fs = require 'fs'
+
+credentials = {
+  key: fs.readFileSync(process.env.SSL_SERVER_KEY_PATH),
+  cert: fs.readFileSync(process.env.SSL_SERVER_CERT_PATH)
+}
+
+httpsServer = https.createServer credentials, (req, res) ->
+  res.writeHead(200, {'Content-Type': 'text/plain'})
+  res.end("PokeTalk-Channel-Server/1.0\n")
+
+httpsServer.listen(WSS_SERVER_PORT)
+
 # WebSocket
-webSocketServer = new require('ws').Server(port: WEBSOCKET_SERVER_PORT)
+webSocketServer = new require('ws').Server(
+  server: httpsServer
+)
+
+webSocketServer.on 'connection', (socket)  ->
+  remoteAddress = socket.upgradeReq.connection.remoteAddress
+  destUrl = socket.upgradeReq.url
+  console.log({addr: remoteAddress, url: destUrl})
 
 # URL
 url = require 'url'
-sessions = []
 
 redisClient.psubscribe 'rooms.*'
 redisClient.on 'pmessage', (channel, pattern, message) ->
@@ -21,7 +45,6 @@ redisClient.on 'pmessage', (channel, pattern, message) ->
     delete data.location
   webSocketServer.clients.forEach (client) ->
     clientUrl = url.parse(client.upgradeReq.url, true)
-    console.log(channel: pattern, pathname: clientUrl.pathname, query: clientUrl.query)
     if clientUrl.query['location'] && clientUrl.query['distance']
       latLng = clientUrl.query['location'].split(',')
       distance = Math.abs getDistanceFromLatLonInKm(latLng[0], latLng[1], location[0], location[1])
@@ -43,4 +66,3 @@ getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) ->
 
 deg2rad = (deg) ->
   deg * Math.PI / 180
-  

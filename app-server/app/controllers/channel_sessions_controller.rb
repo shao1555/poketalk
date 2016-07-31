@@ -1,7 +1,6 @@
 class ChannelSessionsController < ApplicationController
   def new
-    # TODO: 振り分けとか
-    url = URI.parse('ws://127.0.0.1:8080/')
+    url = URI.parse(ENV['CHANNEL_SERVERS'].split(',').sample)
     url_params = {}
     if params[:room_id]
       url.path = "/rooms/#{params[:room_id]}"

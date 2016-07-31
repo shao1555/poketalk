@@ -21,6 +21,7 @@
 
 # dot-env
 /app-server/.env
+/channel-server/.env
 
 /channel-server/node_modules
 
