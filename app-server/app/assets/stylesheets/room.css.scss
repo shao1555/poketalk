@@ -34,6 +34,27 @@ div#room {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-size: 15px;
 
+  .brand {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin-right: 10em;
+    border: 1px solid #e7e7e7;
+    min-height: 57px;
+    background-color: #f8f8f8;
+    background-image: image-url('poketalk_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat no-repeat;
+    background-position-x: left;
+  }
+
+  #room-top-bar {
+    width: 10em;
+    right: 0;
+    left: auto;
+  }
+
   .talk-container {
     width: 100%;
     height: 100%;

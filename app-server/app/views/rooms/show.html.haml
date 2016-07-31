@@ -1,6 +1,5 @@
 = javascript_include_tag 'room'
 
-
 %div.template
   %div#message-bubble-template
     %div.message
@@ -31,16 +30,26 @@
   %p
     位置情報を受信中です。もう少しお待ちください。
 
-%div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id), distance: 5 } }
+%div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id), distance: @distance } }
   %div.talk-container.flex-layout-box
-    %nav.navbar.navbar-default.navbar-fixed-top
+    %div.brand
+    %nav#room-top-bar.navbar.navbar-default.navbar-fixed-top
       .container-fluid
-        %ul.nav.navbar-nav.navbar-left
-          %li
-            = link_to root_path, class: 'navbar-brand' do
-              = "##{@room.name}"
-          %li
-            %a{href: '#'} range: 5km
+        %ul.nav.navbar-nav.navbar-right
+          %li.dropdown
+            %a.dropdown-toggle{href: '#', data: {toggle: 'dropdown'}}
+              周囲#{@distance}km
+              %span.caret
+            %ul.dropdown-menu
+              %li
+                = link_to '1km', params.merge({distance: 1})
+              %li
+                = link_to '5km', params.merge({distance: 5})
+              %li
+                = link_to '20km', params.merge({distance: 20})
+              %li
+                = link_to '50km', params.merge({distance: 50})
+
 
     %div.messages
       .empty-view
