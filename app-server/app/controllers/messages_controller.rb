@@ -17,8 +17,15 @@ class MessagesController < ApplicationController
   end
 
   def create
+    # ログインしてない状態
+    render nothing: true, status: :bad_request and return if current_user.nil?
+
     @message = current_user.messages.create(message_params)
-    render :show
+    if @message.persisted?
+      render :show
+    else
+      render nothing: true, status: :bad_request
+    end
   end
 
   def show

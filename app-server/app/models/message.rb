@@ -9,7 +9,10 @@ class Message
   field :body
   field :location, type: Point, sphere: true
   field :image_url
-  field :location_visible, type: Boolean
+  field :location_visible, type: Boolean, default: false
+
+  validates_presence_of :body, if: -> { !location_visible && image_url.blank? }
+  validates_format_of :image_url, with: /\A#{Regexp.escape(ImageUploadTicketsController::RESOURCE_URL)}.*\z/
 
   after_create :publish_to_redis
 

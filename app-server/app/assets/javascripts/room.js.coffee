@@ -176,3 +176,5 @@ $(document).ready ->
     currentUserId = data['user']['id']
     $('.message-composer').css('display', 'inline-flex')
     $('.user-sign-up').css('display', 'none')
+
+  # $('#new_message').on 'ajax:'

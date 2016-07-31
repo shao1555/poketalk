@@ -1,6 +1,7 @@
 class ImageUploadTicketsController < ApplicationController
+  RESOURCE_URL = 'https://poketalk.s3.amazonaws.com/'
   def new
-    resource_uri = URI.parse('https://poketalk.s3.amazonaws.com/')
+    resource_uri = URI.parse(RESOURCE_URL)
     file_name = "images/#{SecureRandom.hex(8)}"
     resource_uri.path = "/#{file_name}"
 

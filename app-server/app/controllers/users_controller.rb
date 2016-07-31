@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
   def create
     @user = User.create(user_params)
-    session[:current_user_id] = @user.id.to_s
-    render :show
+    if @user.persisted?
+      session[:current_user_id] = @user.id.to_s
+      render :show
+    else
+      render nothing: true, status: :bad_request
+    end
   end
 
   def me

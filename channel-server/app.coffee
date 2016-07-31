@@ -43,3 +43,4 @@ getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) ->
 
 deg2rad = (deg) ->
   deg * Math.PI / 180
+  
