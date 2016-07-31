@@ -6,6 +6,8 @@ class Room
 
   field :name
 
+  index({name: 1})
+
   def channel_name
     "rooms.#{self.id}"
   end

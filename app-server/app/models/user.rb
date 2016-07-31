@@ -6,5 +6,7 @@ class User
 
   field :name
 
+  index({created_at: 1})
+
   validates_presence_of :name
 end

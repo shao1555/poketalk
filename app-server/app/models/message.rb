@@ -11,6 +11,10 @@ class Message
   field :image_url
   field :location_visible, type: Boolean, default: false
 
+  index({room_id: 1, created_at: 1})
+  index({user_id: 1, created_at: 1})
+  sphere_index :location
+
   validates_presence_of :body, if: -> { !location_visible && image_url.blank? }
   validates_format_of :image_url, with: /\A#{Regexp.escape(ImageUploadTicketsController::RESOURCE_URL)}.*\z/, allow_blank: true
 
