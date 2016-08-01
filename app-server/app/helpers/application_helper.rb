@@ -9,13 +9,13 @@ module ApplicationHelper
         og: {
           title: :title,
           type: 'website',
-          image: '/og.jpg',
+          image: asset_url('og.jpg'),
           description: :description
         },
         twitter: {
           card: 'summary_large_image',
           site: '@poketalk_jp',
-          image: '/og.jpg',
+          image: asset_url('og.jpg'),
           title: :title,
           description: :description
         }
