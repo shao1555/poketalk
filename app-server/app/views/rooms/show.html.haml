@@ -33,7 +33,8 @@
 
 %div#room{data: { room_id: @room.id, current_user_id: current_user.try(:id), distance: @distance } }
   %div.talk-container.flex-layout-box
-    %div.brand
+    = link_to root_path do
+      %div.brand
     %nav#room-top-bar.navbar.navbar-default.navbar-fixed-top
       .container-fluid
         %ul.nav.navbar-nav.navbar-right
