@@ -1,3 +1,22 @@
+:ruby
+  meta_tags = {
+    title: "#{truncate @message.user.try(:name), length: 16}: #{truncate @message.body, length: 64}",
+    og: {
+      site_name: 'PokéTalk | ポケトーク',
+      title: "#{truncate @message.user.try(:name), length: 16}: #{truncate @message.body, length: 64}",
+      description: truncate(@message.body, length: 512)
+    }
+  }
+  if @message.image_url.present?
+    meta_tags.merge!(
+      og: { image: @message.image_url },
+      twitter: { image: @message.image_url }
+    )
+  end
+
+  set_meta_tags(meta_tags)
+
+
 %div#single-message
   = link_to root_path do
     %header
@@ -28,5 +47,5 @@
       ©
       %a{href:'https://twitter.com/shao1555'} shao1555
       —
-      %a{href:'poketalk@shao.jp'} 開発者に連絡
+      %a{href:'https://goo.gl/forms/M23NzayQR5X2ZFxq2'} 開発者に連絡
 

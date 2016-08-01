@@ -12,7 +12,8 @@
   }
 
   .message {
-    margin: 1em 1em 2em 1em ;
+    margin: 1em auto;
+    max-width: 600px;
 
     .message-user-name {
       font-weight: bold;
